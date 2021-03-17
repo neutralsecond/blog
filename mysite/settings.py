@@ -26,7 +26,7 @@ SECRET_KEY = 'ihr_z#galti-05jm6$xa!7z(jb&xgn%@rynwu#t4p2j3@ngo*9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1'] # add hostname from Amazon
+ALLOWED_HOSTS = ['*'] # any host
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'djangodb',
         'USER': 'ahmet',
-        'PASSWORD': 'abu23571113',
+        'PASSWORD': '12345',
         'HOST': 'localhost',
         'PORT': ''
     }
