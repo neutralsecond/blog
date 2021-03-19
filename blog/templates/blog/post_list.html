@@ -4,7 +4,11 @@
 {% for post in posts %}
 <article class="post">
   <time class="date">
-    {{ post.date }}
+    written by 
+    <a href="{% url 'blogger_post_list' pk=post.author.pk %}">
+        {{post.author.username}}
+    </a> 
+    on {{ post.date | date:"F d, Y" }}
   </time>
   <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
   <p>{{ post.text|linebreaksbr }}</p>

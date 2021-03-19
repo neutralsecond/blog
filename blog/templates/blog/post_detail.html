@@ -13,11 +13,13 @@
                 </a>
             {% endif %}
         </aside>
-        {% if post.date %}
-            <time class="date">
-                {{ post.date }}
-            </time>
-        {% endif %}
+        <time class="date">
+            written by 
+            <a href="{% url 'blogger_post_list' pk=post.author.pk %}">
+                {{post.author.username}}
+            </a> 
+            on {{ post.date | date:"F d, Y" }}
+        </time>
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
     </article>
