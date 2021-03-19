@@ -12,7 +12,8 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+    is_mypost = (request.user == post.author)
+    return render(request, 'blog/post_detail.html', {'post': post, 'is_mypost':is_mypost})
 
 def blogger_post_list(request, pk):
     author = User.objects.get(pk=pk)

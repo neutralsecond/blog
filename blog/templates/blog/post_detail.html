@@ -4,7 +4,7 @@
     <article class="post">
         
         <aside class="actions">
-            {% if user.is_authenticated %}
+            {% if is_mypost %}
                 <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">
                     {% include './icons/pencil-fill.svg' %}
                 </a>
