@@ -15,7 +15,7 @@
         </aside>
         <time class="date">
             written by 
-            <a href="{% url 'blogger_post_list' pk=post.author.pk %}">
+            <a href="{% url 'post_list_blogger' pk=post.author.pk %}">
                 {{post.author.username}}
             </a> 
             on {{ post.date | date:"F d, Y" }}
