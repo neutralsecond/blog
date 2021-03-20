@@ -1,17 +1,36 @@
 {% extends 'blog/base.html' %}
 
+{% block subheader %}
+  {% if author %}
+    Posts of {{ author.username }}
+    {% if show_fav_icon %}
+      {% if is_fav %}
+      <a href="{% url 'del_favorite_blogger' pk=author.pk %}" class="subheader">
+        {% include './icons/star-fill.svg' %}
+      </a>
+      {% else %}
+      <a href="{% url 'add_favorite_blogger' pk=author.pk %}" class="subheader">
+        {% include './icons/star.svg' %}
+      </a>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    All posts
+  {% endif %}
+{% endblock %}
+
 {% block content %}
-{% for post in posts %}
-<article class="post">
-  <time class="date">
-    written by 
-    <a href="{% url 'post_list_blogger' pk=post.author.pk %}">
-        {{post.author.username}}
-    </a> 
-    on {{ post.date | date:"F d, Y" }}
-  </time>
-  <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
-  <p>{{ post.text|linebreaksbr }}</p>
-</article>
-{% endfor %}
+  {% for post in posts %}
+    <article class="post">
+      <time class="date">
+        written by 
+        <a href="{% url 'post_list_blogger' pk=post.author.pk %}">
+            {{post.author.username}}
+        </a> 
+        on {{ post.date | date:"F d, Y" }}
+      </time>
+      <h3><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h3>
+      <p>{{ post.text|linebreaksbr }}</p>
+    </article>
+  {% endfor %}
 {% endblock %}
