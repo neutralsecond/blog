@@ -7,15 +7,24 @@ from .forms import PostForm
 
 # Create your views here.
 def post_list_all(request):
-    posts = Post.objects.all().order_by('date')
+    ''' Displays all posts with those of favorite authors at the top if signed in '''
+    if request.user.is_authenticated:
+        fav_authors = [fav.favorite for fav in Favorites.objects.filter(blogger=request.user)]
+        fav_posts = Post.objects.filter(author__in=fav_authors).order_by('date')
+        nonfav_posts = Post.objects.exclude(author__in=fav_authors).order_by('date')
+        posts = [i for i in fav_posts] + [i for i in nonfav_posts]
+    else:
+        posts = Post.objects.all().order_by('date')
     return render(request, 'blog/post_list.html', {'posts':posts})
 
 def post_detail(request, pk):
+    ''' Displays only the given post '''
     post = get_object_or_404(Post, pk=pk)
     is_mypost = (request.user == post.author)
     return render(request, 'blog/post_detail.html', {'post': post, 'is_mypost':is_mypost})
 
 def post_list_blogger(request, pk):
+    ''' Displays all posts of a given blogger '''
     author = get_object_or_404(User, pk=pk)
     posts = Post.objects.filter(author=author).order_by('date')
     show_fav_icon = is_fav = False
