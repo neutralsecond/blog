@@ -19,6 +19,9 @@
           </a>
           <p class="top-menu">Hello {{ user.username }}</p>
         {% else %}
+          <a href="{% url 'signup' %}" class="top-menu">
+            {% include './icons/key.svg' %}
+          </a>
           <a href="{% url 'login' %}" class="top-menu">
             {% include './icons/box-arrow-in-right.svg' %}
           </a>
