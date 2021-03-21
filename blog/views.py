@@ -22,7 +22,7 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     is_mypost = (request.user == post.author)
     return render(request, 'blog/post_detail.html', {'post': post, 'is_mypost':is_mypost})
-
+    
 def post_list_blogger(request, pk):
     ''' Displays all posts of a given blogger '''
     author = get_object_or_404(User, pk=pk)
@@ -51,6 +51,8 @@ def post_new(request):
 @login_required
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    if post.author != request.user:
+        return redirect('/')
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -61,23 +63,24 @@ def post_edit(request, pk):
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+        return render(request, 'blog/post_edit.html', {'form': form})
 
 @login_required
 def post_remove(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    return redirect('post_list_blogger', pk=request.user.pk)
+    post = Post.objects.get(pk=pk)
+    if post.author != request.user:
+        return redirect('/')
+    else:
+        Post.objects.get(pk=pk).delete()
+        return redirect('post_list_blogger', pk=request.user.pk)
 
 @login_required
 def add_favorite_blogger(request, pk):
     author = get_object_or_404(User, pk=pk)
-    fav = Favorites(blogger=request.user, favorite=author)
-    fav.save()
+    Favorites.objects.create(blogger=request.user, favorite=author)
     return redirect('post_list_blogger', pk=pk)
 
 @login_required
 def del_favorite_blogger(request, pk):
-    fav = get_object_or_404(Favorites, blogger=request.user.pk, favorite=pk)
-    fav.delete()
+    Favorites.objects.get(blogger=request.user.pk, favorite=pk).delete()
     return redirect('post_list_blogger', pk=pk)
